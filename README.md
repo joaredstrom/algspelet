@@ -4,73 +4,79 @@
 
 ## :sweden: Svenska
 
-Ett spel for tva spelare dar alger vaxer upp fran havsbotten och man ska trycka pa dem innan de forsvinner!
+Ett spel för två spelare där alger växer upp från havsbotten och man ska trycka på dem innan de försvinner!
 
-Byggt med HTML, CSS och JavaScript. Ingen framework behovs.
+Byggt med HTML, CSS och JavaScript med hjälp av Claude Opus 4.6 (claude-opus-4-6) via Claude Code. Ingen framework behövs.
 
 ### Funktioner
 
-- Alger som vaxer upp som sjogras fran havsbotten pa slumpmassiga stallen
-- Tva spelare pa delad skarm med en rod linje i mitten
-- Explosion med ljud nar man triffar en alg
-- "Eeeoo"-ljud nar alger vaxer upp och ner
-- Forsta spelaren till 30 poang vinner
-- Det blir svarare - fler och fler alger dyker upp
+- Alger som växer upp som sjögräs från havsbotten på slumpmässiga ställen
+- Två spelare på delad skärm med en röd linje i mitten
+- Explosion med ljud när man träffar en alg
+- "Eeeoo"-ljud när alger växer upp och ner
+- Första spelaren till 30 poäng vinner
+- Det blir svårare - fler och fler alger dyker upp
 - Havsbotten-bakgrund med bubblor
 
-### Barnets instruktioner
+### Mina instruktioner
 
 #### Grundidén
 
-> Forst ska det vaxa upp snabbt lite alger och sen ska de aka ner igen, och man ska forsoka trycka pa dem och sa forsvinner dem.
+Jag sa till Claude:
 
-#### Mina foljdfragor och svar
+> Först ska det växa upp snabbt lite alger och sen ska de åka ner igen, och man ska försöka trycka på dem och så försvinner dem.
 
-- **Var ska algerna vaxa ifran?** - Pa alla mojliga olika stallen
-- **Hur ska algerna se ut?** - Som vanliga alger, som sjogras
-- **Hur snabbt aker de ner igen?** - Man ska hinna se dem ett tag
-- **Vad hander nar man trycker pa en alg?** - Det ska vara en explosion som man ser och sa hor man det. Det ska ocksa lata nar de aker upp och ner, eeeoo upp och ner
-- **Ska man fa poang?** - Ja
+#### AIs följdfrågor och mina svar
+
+Claude ställde frågor, och jag svarade:
+
+- **Var ska algerna växa ifrån?** - På alla möjliga olika ställen
+- **Hur ska algerna se ut?** - Som vanliga alger, som sjögräs
+- **Hur snabbt åker de ner igen?** - Man ska hinna se dem ett tag
+- **Vad händer när man trycker på en alg?** - Det ska vara en explosion som man ser och så hör man det. Det ska också låta när de åker upp och ner, eeeoo upp och ner
+- **Ska man få poäng?** - Ja
 - **Kommer det fler och fler alger?** - Ja det ska komma fler och fler
 - **Ska spelet ha en bakgrund?** - Havsbotten
 
-Barnet la ocksa till:
+Sen la jag till:
 
-> Det ska ocksa vara tva spelare
+> Det ska också vara två spelare
 
-- **Tva spelare pa samma skarm?** - Halva skarmen var, en rod linje i mitten
-- **Hur vet man vem som tryckte?** - Olika farger och olika sidor
-- **Hur lange pagar spelet?** - Den som forst far 30
-- **Vem vinner?** - Den som forst far 30
-- **Ska det finnas en startskarm?** - Borja direkt
+Claude ställde fler frågor:
 
-### Hur instruktionerna blev till kod
+- **Två spelare på samma skärm?** - Halva skärmen var, en röd linje i mitten
+- **Hur vet man vem som tryckte?** - Olika färger och olika sidor
+- **Hur länge pågår spelet?** - Den som först får 30
+- **Vem vinner?** - Den som först får 30
+- **Ska det finnas en startskärm?** - Börja direkt
 
-Har ar vad Claude gjorde for att instruktionerna skulle bli verklighet:
+### Hur mina instruktioner blev till kod
+
+Här är vad Claude gjorde för att mina instruktioner skulle bli verklighet:
 
 #### 1. Skapa havsbotten
 
-Bakgrunden ar en gradient som gar fran morkt bla hogst upp (vattnet) ner till brunt langst ner (havsbotten). Det finns ocksa sma bubblor som stiger uppat for att det ska kanna mer som under vattnet.
+Bakgrunden är en gradient som går från mörkt blå högst upp (vattnet) ner till brunt längst ner (havsbotten). Det finns också små bubblor som stiger uppåt för att det ska känna mer som under vattnet.
 
-#### 2. Fa alger att vaxa
+#### 2. Få alger att växa
 
-Varje alg ar en gron stam som vaxer uppat med sma blad pa sidan - precis som sjogras. De dyker upp pa slumpmassiga stallen, vaxer upp, stannar kvar ett tag, och krymper sedan tillbaka ner. De vajar lite fram och tillbaka for att kanna mer levande.
+Varje alg är en grön stam som växer uppåt med små blad på sidan - precis som sjögräs. De dyker upp på slumpmässiga ställen, växer upp, stannar kvar ett tag, och krymper sedan tillbaka ner. De vajar lite fram och tillbaka för att känna mer levande.
 
 #### 3. Ljuden - eeeoo
 
-Barnet ville att det skulle lata "eeeoo" nar algerna aker upp och ner. Claude anvande Web Audio API for att skapa en ton som glider uppat (eee) nar algen vaxer och nedat (ooo) nar den krymper. Nar man traffar en alg hors ett explosionsljud (vitt brus som tynar bort snabbt).
+Jag ville att det skulle låta "eeeoo" när algerna åker upp och ner. Claude använde Web Audio API för att skapa en ton som glider uppåt (eee) när algen växer och nedåt (ooo) när den krymper. När man träffar en alg hörs ett explosionsljud (vitt brus som tynar bort snabbt).
 
-#### 4. Tva spelare
+#### 4. Två spelare
 
-Skarmen ar delad pa mitten med en rod linje. Spelare 1 (bla) spelar pa vanster sida och spelare 2 (orange) spelar pa hoger sida. Alger dyker upp pa bada sidor och varje spelare kan bara trycka pa alger pa sin egen sida.
+Skärmen är delad på mitten med en röd linje. Spelare 1 (blå) spelar på vänster sida och spelare 2 (orange) spelar på höger sida. Alger dyker upp på båda sidor och varje spelare kan bara trycka på alger på sin egen sida.
 
-#### 5. Poang och vinst
+#### 5. Poäng och vinst
 
-Varje gang man trycker pa en alg far man ett poang och poangen studsar till lite for att det ska kannas bra. Den som forst nar 30 poang vinner och da visas en vinnarskarm med en "Spela igen"-knapp.
+Varje gång man trycker på en alg får man ett poäng och poängen studsar till lite för att det ska kännas bra. Den som först når 30 poäng vinner och då visas en vinnarskärm med en "Spela igen"-knapp.
 
-#### 6. Svårare och svarare
+#### 6. Svårare och svårare
 
-I borjan dyker det upp en ny alg ungefar varannan sekund. Var femte sekund okar takten sa att alger dyker upp oftare och oftare. Tillslut kommer de sa snabbt att det ar riktigt svart att hinna med!
+I början dyker det upp en ny alg ungefär varannan sekund. Var femte sekund ökar takten så att alger dyker upp oftare och oftare. Till slut kommer de så snabbt att det är riktigt svårt att hinna med!
 
 ---
 
@@ -78,7 +84,7 @@ I borjan dyker det upp en ny alg ungefar varannan sekund. Var femte sekund okar 
 
 A two-player game where seaweed grows up from the ocean floor and you have to tap it before it disappears!
 
-Built with HTML, CSS and JavaScript. No framework needed.
+Built with HTML, CSS and JavaScript using Claude Opus 4.6 (claude-opus-4-6) via Claude Code. No framework needed.
 
 ### Features
 
@@ -90,13 +96,17 @@ Built with HTML, CSS and JavaScript. No framework needed.
 - It gets harder - more and more seaweed appears
 - Ocean floor background with bubbles
 
-### The child's instructions
+### My instructions
 
 #### The basic idea
 
+I told Claude:
+
 > First some seaweed should grow up quickly and then go back down again, and you should try to tap them and then they disappear.
 
-#### My follow-up questions and answers
+#### The AI's follow-up questions and my answers
+
+Claude asked questions, and I answered:
 
 - **Where should the seaweed grow from?** - In all sorts of different places
 - **What should the seaweed look like?** - Like regular seaweed, like sea grass
@@ -106,9 +116,11 @@ Built with HTML, CSS and JavaScript. No framework needed.
 - **Do more and more seaweed appear?** - Yes, more and more should come
 - **Should the game have a background?** - Ocean floor
 
-The child also added:
+Then I added:
 
 > There should also be two players
+
+Claude asked more questions:
 
 - **Two players on the same screen?** - Half the screen each, a red line in the middle
 - **How do you know who tapped?** - Different colors and different sides
@@ -116,9 +128,9 @@ The child also added:
 - **Who wins?** - The one who first gets 30
 - **Should there be a start screen?** - Start immediately
 
-### How the instructions became code
+### How my instructions became code
 
-Here is what Claude did to make the instructions become reality:
+Here is what Claude did to make my instructions become reality:
 
 #### 1. Create the ocean floor
 
@@ -130,7 +142,7 @@ Each seaweed is a green stem that grows upward with small leaves on the side - j
 
 #### 3. The sounds - eeeoo
 
-The child wanted it to sound "eeeoo" when the seaweed goes up and down. Claude used the Web Audio API to create a tone that slides upward (eee) when the seaweed grows and downward (ooo) when it shrinks. When you hit a seaweed, an explosion sound plays (white noise that fades quickly).
+I wanted it to sound "eeeoo" when the seaweed goes up and down. Claude used the Web Audio API to create a tone that slides upward (eee) when the seaweed grows and downward (ooo) when it shrinks. When you hit a seaweed, an explosion sound plays (white noise that fades quickly).
 
 #### 4. Two players
 
