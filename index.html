@@ -25,19 +25,87 @@
             width: 100%;
             height: 100%;
             position: relative;
-            background: linear-gradient(180deg, #0a3d6b 0%, #0c4a7a 30%, #1a6e5c 70%, #2d8a6e 85%, #3a6b4a 95%, #5c4a2a 100%);
+            background: linear-gradient(180deg,
+                #051c2e 0%,
+                #0a3155 15%,
+                #0d4a6e 35%,
+                #0f5c7a 50%,
+                #126a6a 65%,
+                #1a6e5c 80%,
+                #1f5c4a 90%,
+                #1a4a3a 100%
+            );
+            overflow: hidden;
         }
 
-        /* Havsbotten-dekorationer */
-        #game::before {
-            content: '';
+        /* Ljusstrålar från ytan */
+        .light-ray {
+            position: absolute;
+            top: -10%;
+            width: 120px;
+            height: 110%;
+            background: linear-gradient(180deg,
+                rgba(180, 220, 255, 0.12) 0%,
+                rgba(180, 220, 255, 0.06) 30%,
+                rgba(180, 220, 255, 0.02) 60%,
+                transparent 100%
+            );
+            z-index: 1;
+            pointer-events: none;
+            transform-origin: top center;
+            animation: rayShimmer 8s ease-in-out infinite;
+        }
+
+        @keyframes rayShimmer {
+            0%, 100% { opacity: 0.6; transform: skewX(-2deg) scaleX(1); }
+            25% { opacity: 0.9; transform: skewX(1deg) scaleX(1.1); }
+            50% { opacity: 0.5; transform: skewX(-1deg) scaleX(0.9); }
+            75% { opacity: 0.8; transform: skewX(2deg) scaleX(1.05); }
+        }
+
+        /* Vattenpartikel-dimma */
+        .water-fog {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(10, 60, 80, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(10, 50, 70, 0.25) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 90%, rgba(15, 55, 50, 0.3) 0%, transparent 40%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Sandbotten */
+        #ocean-floor {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 15%;
-            background: linear-gradient(180deg, transparent, #4a3520 40%, #3d2b18);
-            z-index: 0;
+            height: 18%;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        #ocean-floor svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Dekorationer på botten */
+        #decorations {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 25%;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        #decorations svg {
+            width: 100%;
+            height: 100%;
         }
 
         /* Röd linje i mitten */
@@ -47,10 +115,14 @@
             top: 0;
             bottom: 0;
             width: 4px;
-            background: #ff3333;
+            background: linear-gradient(180deg,
+                rgba(255, 50, 50, 0.7) 0%,
+                rgba(255, 50, 50, 0.4) 50%,
+                rgba(255, 50, 50, 0.6) 100%
+            );
             z-index: 50;
             transform: translateX(-50%);
-            box-shadow: 0 0 10px rgba(255, 50, 50, 0.5);
+            box-shadow: 0 0 15px rgba(255, 50, 50, 0.3), 0 0 5px rgba(255, 50, 50, 0.5);
         }
 
         /* Poäng */
@@ -60,7 +132,7 @@
             font-size: 3rem;
             font-weight: bold;
             z-index: 60;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5), 0 0 30px currentColor;
         }
 
         #score1 {
@@ -96,44 +168,18 @@
             transform: translateX(50%);
         }
 
-        /* Alger */
+        /* Alger (SVG-baserade) */
         .alg {
             position: absolute;
-            bottom: 5%;
+            bottom: 12%;
             z-index: 10;
             cursor: pointer;
             transform-origin: bottom center;
         }
 
-        .alg-stem {
-            width: 12px;
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 6px;
-            transition: height 0.05s linear;
-        }
-
-        .alg-leaf {
-            position: absolute;
-            width: 22px;
-            height: 14px;
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .alg-leaf.visible {
-            opacity: 1;
-        }
-
-        .alg-leaf.left {
-            transform: rotate(-30deg);
-        }
-
-        .alg-leaf.right {
-            transform: rotate(30deg);
+        .alg svg {
+            overflow: visible;
+            filter: drop-shadow(0 0 3px rgba(0, 80, 0, 0.3));
         }
 
         /* Explosion */
@@ -159,6 +205,20 @@
                 transform: translate(var(--tx), var(--ty)) scale(0);
                 opacity: 0;
             }
+        }
+
+        /* Explosion ring */
+        .explosion-ring {
+            position: absolute;
+            border: 3px solid rgba(255, 200, 50, 0.8);
+            border-radius: 50%;
+            animation: ringExpand 0.4s ease-out forwards;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes ringExpand {
+            0% { width: 0; height: 0; opacity: 1; }
+            100% { width: 80px; height: 80px; opacity: 0; }
         }
 
         /* Vinnare */
@@ -204,24 +264,203 @@
             transform: scale(0.95);
         }
 
-        /* Bubblor i bakgrunden */
+        /* Bubblor */
         .bubble {
             position: absolute;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), rgba(255,255,255,0.05));
-            z-index: 1;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), rgba(255,255,255,0.03));
+            z-index: 5;
             animation: rise linear forwards;
             pointer-events: none;
         }
 
         @keyframes rise {
-            0% { transform: translateY(0) scale(1); opacity: 0.6; }
-            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+            0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.7; }
+            25% { transform: translateY(-25vh) translateX(8px) scale(0.95); opacity: 0.6; }
+            50% { transform: translateY(-50vh) translateX(-5px) scale(0.9); opacity: 0.5; }
+            75% { transform: translateY(-75vh) translateX(6px) scale(0.8); opacity: 0.3; }
+            100% { transform: translateY(-100vh) translateX(0) scale(0.7); opacity: 0; }
+        }
+
+        /* Drivande partiklar i vattnet */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(200, 230, 200, 0.15);
+            z-index: 2;
+            pointer-events: none;
+            animation: drift linear infinite;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0); opacity: 0.3; }
+            25% { transform: translate(15px, -10px); opacity: 0.5; }
+            50% { transform: translate(-10px, -25px); opacity: 0.3; }
+            75% { transform: translate(20px, -15px); opacity: 0.4; }
+            100% { transform: translate(0, 0); opacity: 0.3; }
         }
     </style>
 </head>
 <body>
     <div id="game">
+        <!-- Ljusstrålar -->
+        <div class="light-ray" style="left: 8%; width: 80px; animation-delay: 0s; animation-duration: 7s;"></div>
+        <div class="light-ray" style="left: 22%; width: 100px; animation-delay: 1.5s; animation-duration: 9s;"></div>
+        <div class="light-ray" style="left: 38%; width: 60px; animation-delay: 3s; animation-duration: 6s;"></div>
+        <div class="light-ray" style="left: 55%; width: 90px; animation-delay: 0.8s; animation-duration: 8s;"></div>
+        <div class="light-ray" style="left: 68%; width: 110px; animation-delay: 2.2s; animation-duration: 10s;"></div>
+        <div class="light-ray" style="left: 82%; width: 70px; animation-delay: 4s; animation-duration: 7.5s;"></div>
+        <div class="light-ray" style="left: 92%; width: 85px; animation-delay: 1s; animation-duration: 8.5s;"></div>
+
+        <!-- Vattendimma -->
+        <div class="water-fog"></div>
+
+        <!-- Havsbotten (sand med ojämn yta) -->
+        <div id="ocean-floor">
+            <svg viewBox="0 0 1200 200" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="sandGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#8B7355"/>
+                        <stop offset="30%" stop-color="#7A6345"/>
+                        <stop offset="60%" stop-color="#6B5535"/>
+                        <stop offset="100%" stop-color="#5A4528"/>
+                    </linearGradient>
+                    <filter id="sandTexture">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="2"/>
+                        <feColorMatrix type="saturate" values="0"/>
+                        <feBlend in="SourceGraphic" mode="multiply"/>
+                    </filter>
+                </defs>
+                <!-- Ojämn sandkant -->
+                <path d="M0,60 C50,45 100,55 150,40 C200,30 250,50 300,35 C350,25 400,45 450,38
+                         C500,30 550,48 600,32 C650,25 700,42 750,35 C800,28 850,46 900,38
+                         C950,30 1000,48 1050,40 C1100,32 1150,50 1200,42 L1200,200 L0,200 Z"
+                      fill="url(#sandGrad)" filter="url(#sandTexture)"/>
+                <!-- Ljusare sandtoppar -->
+                <path d="M0,60 C50,45 100,55 150,40 C200,30 250,50 300,35 C350,25 400,45 450,38
+                         C500,30 550,48 600,32 C650,25 700,42 750,35 C800,28 850,46 900,38
+                         C950,30 1000,48 1050,40 C1100,32 1150,50 1200,42 L1200,55 C1150,63 1100,45 1050,53
+                         C1000,61 950,43 900,51 C850,59 800,41 750,48 C700,55 650,38 600,45
+                         C550,61 500,43 450,51 C400,58 350,38 300,48 C250,63 200,43 150,53
+                         C100,68 50,58 0,73 Z"
+                      fill="rgba(160, 140, 100, 0.3)"/>
+            </svg>
+        </div>
+
+        <!-- Dekorationer: stenar, snäckor, sjöstjärnor, koraller -->
+        <div id="decorations">
+            <svg viewBox="0 0 1200 250" preserveAspectRatio="none">
+                <!-- Stenar -->
+                <ellipse cx="80" cy="195" rx="35" ry="22" fill="#5a5a5a" opacity="0.8"/>
+                <ellipse cx="80" cy="195" rx="35" ry="22" fill="url(#stoneShade)" opacity="0.4"/>
+                <ellipse cx="95" cy="200" rx="20" ry="14" fill="#6a6a6a" opacity="0.7"/>
+
+                <ellipse cx="350" cy="205" rx="28" ry="16" fill="#4f4f4f" opacity="0.8"/>
+                <ellipse cx="340" cy="208" rx="15" ry="10" fill="#5d5d5d" opacity="0.6"/>
+
+                <ellipse cx="700" cy="198" rx="40" ry="20" fill="#555" opacity="0.8"/>
+                <ellipse cx="715" cy="202" rx="22" ry="13" fill="#666" opacity="0.6"/>
+
+                <ellipse cx="1050" cy="202" rx="30" ry="18" fill="#4a4a4a" opacity="0.8"/>
+                <ellipse cx="1060" cy="206" rx="18" ry="11" fill="#5c5c5c" opacity="0.6"/>
+
+                <ellipse cx="550" cy="210" rx="20" ry="12" fill="#585858" opacity="0.7"/>
+
+                <ellipse cx="920" cy="205" rx="25" ry="15" fill="#525252" opacity="0.75"/>
+
+                <!-- Koraller -->
+                <!-- Korall 1 - förgrenad -->
+                <g transform="translate(180, 175)" opacity="0.85">
+                    <path d="M0,40 Q2,25 -5,12 Q-7,5 -3,0" stroke="#e05555" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M0,40 Q-2,28 5,15 Q8,8 12,2" stroke="#d44" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    <path d="M0,40 Q5,30 2,20 Q0,14 -8,8" stroke="#c54040" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <circle cx="-3" cy="0" r="2.5" fill="#ff7777"/>
+                    <circle cx="12" cy="2" r="2.5" fill="#ff6666"/>
+                    <circle cx="-8" cy="8" r="2" fill="#ee6060"/>
+                </g>
+
+                <!-- Korall 2 - rund typ -->
+                <g transform="translate(850, 178)" opacity="0.8">
+                    <ellipse cx="0" cy="15" rx="18" ry="15" fill="#d4845a"/>
+                    <ellipse cx="-5" cy="10" rx="8" ry="7" fill="#e09570" opacity="0.6"/>
+                    <ellipse cx="6" cy="8" rx="6" ry="5" fill="#daa080" opacity="0.5"/>
+                    <circle cx="-8" cy="14" r="1.5" fill="#c07050"/>
+                    <circle cx="0" cy="9" r="1.5" fill="#c07050"/>
+                    <circle cx="8" cy="13" r="1.5" fill="#c07050"/>
+                    <circle cx="-3" cy="18" r="1.5" fill="#c07050"/>
+                    <circle cx="5" cy="19" r="1.5" fill="#c07050"/>
+                </g>
+
+                <!-- Korall 3 - liten rosa -->
+                <g transform="translate(480, 185)" opacity="0.8">
+                    <path d="M0,30 Q1,20 -3,10 Q-4,5 -1,0" stroke="#e080a0" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M0,30 Q-1,22 4,12 Q6,6 8,2" stroke="#d77090" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <circle cx="-1" cy="0" r="2" fill="#ff99bb"/>
+                    <circle cx="8" cy="2" r="2" fill="#ff90b0"/>
+                </g>
+
+                <!-- Korall 4 -->
+                <g transform="translate(1120, 180)" opacity="0.8">
+                    <path d="M0,35 Q2,22 -4,10 Q-5,4 -2,0" stroke="#cc6644" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    <path d="M0,35 Q-3,25 3,15 Q5,8 9,3" stroke="#bb5533" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M0,35 Q4,28 -2,18 Q-5,12 -10,7" stroke="#aa5040" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <circle cx="-2" cy="0" r="2" fill="#ee8866"/>
+                    <circle cx="9" cy="3" r="2" fill="#dd7755"/>
+                    <circle cx="-10" cy="7" r="1.8" fill="#dd7755"/>
+                </g>
+
+                <!-- Snäckor -->
+                <!-- Spiralsnäcka 1 -->
+                <g transform="translate(250, 202) rotate(-15)" opacity="0.8">
+                    <path d="M0,0 Q8,-2 10,4 Q12,10 6,12 Q0,14 -2,8 Q-4,3 2,2 Q5,1 6,5"
+                          stroke="#ddc8a0" stroke-width="2" fill="#eeddbb" stroke-linecap="round"/>
+                </g>
+
+                <!-- Spiralsnäcka 2 -->
+                <g transform="translate(630, 208) rotate(10)" opacity="0.75">
+                    <path d="M0,0 Q7,-1 9,4 Q11,9 5,11 Q-1,12 -1,7 Q-1,3 3,2 Q5,1 5,4"
+                          stroke="#c8b490" stroke-width="1.8" fill="#e0d0b0" stroke-linecap="round"/>
+                </g>
+
+                <!-- Mussla -->
+                <g transform="translate(450, 205)" opacity="0.8">
+                    <path d="M-10,5 Q-8,-5 0,-8 Q8,-5 10,5 Q5,8 0,7 Q-5,8 -10,5 Z" fill="#c0b0a0"/>
+                    <path d="M0,-8 Q-1,0 -8,5" stroke="#a09080" stroke-width="0.8" fill="none"/>
+                    <path d="M0,-8 Q0,0 0,7" stroke="#a09080" stroke-width="0.8" fill="none"/>
+                    <path d="M0,-8 Q1,0 8,5" stroke="#a09080" stroke-width="0.8" fill="none"/>
+                </g>
+
+                <!-- Sjöstjärnor -->
+                <!-- Sjöstjärna 1 (orange) -->
+                <g transform="translate(150, 205) rotate(20)" opacity="0.85">
+                    <path d="M0,-12 L2,-4 L10,-4 L4,1 L6,9 L0,5 L-6,9 L-4,1 L-10,-4 L-2,-4 Z"
+                          fill="#e07830" stroke="#c06020" stroke-width="0.5"/>
+                    <circle cx="0" cy="-1" r="2" fill="#cc6828" opacity="0.5"/>
+                </g>
+
+                <!-- Sjöstjärna 2 (röd) -->
+                <g transform="translate(780, 210) rotate(-10)" opacity="0.8">
+                    <path d="M0,-10 L1.5,-3 L8,-3 L3,1 L5,7.5 L0,4 L-5,7.5 L-3,1 L-8,-3 L-1.5,-3 Z"
+                          fill="#cc4444" stroke="#aa3333" stroke-width="0.5"/>
+                    <circle cx="0" cy="-0.5" r="1.5" fill="#bb3838" opacity="0.5"/>
+                </g>
+
+                <!-- Sjöstjärna 3 (lila, liten) -->
+                <g transform="translate(990, 208) rotate(35)" opacity="0.75">
+                    <path d="M0,-8 L1.2,-2.5 L6.5,-2.5 L2.5,0.8 L4,6 L0,3.2 L-4,6 L-2.5,0.8 L-6.5,-2.5 L-1.2,-2.5 Z"
+                          fill="#9966aa" stroke="#774488" stroke-width="0.5"/>
+                </g>
+
+                <defs>
+                    <radialGradient id="stoneShade">
+                        <stop offset="0%" stop-color="white" stop-opacity="0.2"/>
+                        <stop offset="100%" stop-color="black" stop-opacity="0.3"/>
+                    </radialGradient>
+                </defs>
+            </svg>
+        </div>
+
         <div id="divider"></div>
 
         <div id="score1" class="score">0</div>
@@ -248,10 +487,27 @@
         let score2 = 0;
         let gameOver = false;
         let alger = [];
-        let spawnInterval = 1800;
+        let spawnInterval = 1200;
         let spawnTimer = null;
         let difficultyTimer = null;
         const WIN_SCORE = 30;
+
+        // ---- Skapa drivande partiklar ----
+        function initParticles() {
+            for (let i = 0; i < 20; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = 2 + Math.random() * 4;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.top = Math.random() * 100 + '%';
+                p.style.animationDuration = (6 + Math.random() * 10) + 's';
+                p.style.animationDelay = (-Math.random() * 10) + 's';
+                game.appendChild(p);
+            }
+        }
+        initParticles();
 
         // ---- Ljud med Web Audio API ----
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -310,14 +566,139 @@
             });
         }
 
-        // ---- Alger ----
-        const algColors = [
-            { stem: '#2e7d32', leaf: '#43a047' },
-            { stem: '#1b5e20', leaf: '#388e3c' },
-            { stem: '#33691e', leaf: '#558b2f' },
-            { stem: '#2e7d32', leaf: '#66bb6a' },
-            { stem: '#1a5c20', leaf: '#4caf50' },
+        // ---- Alger (SVG-baserade, mer realistiska) ----
+        const algColorSets = [
+            { stem: '#2d6e2d', leaf: '#3a8c3a', leafDark: '#256025', tip: '#50a850' },
+            { stem: '#1e5c2e', leaf: '#2d7a3d', leafDark: '#1a4e22', tip: '#40904a' },
+            { stem: '#2a6633', leaf: '#3d8840', leafDark: '#1f5528', tip: '#55a055' },
+            { stem: '#1f5f3a', leaf: '#2e7e4a', leafDark: '#184e2e', tip: '#45954e' },
+            { stem: '#336b2e', leaf: '#459038', leafDark: '#285a24', tip: '#5aaa48' },
         ];
+
+        function createSeaweedSVG(maxHeight, colorSet) {
+            const svgNS = 'http://www.w3.org/2000/svg';
+            const width = 60;
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('width', width);
+            svg.setAttribute('height', maxHeight + 20);
+            svg.setAttribute('viewBox', `0 0 ${width} ${maxHeight + 20}`);
+            svg.style.overflow = 'visible';
+
+            const defs = document.createElementNS(svgNS, 'defs');
+
+            // Gradient för stammen
+            const stemGrad = document.createElementNS(svgNS, 'linearGradient');
+            stemGrad.id = 'sg_' + Math.random().toString(36).slice(2, 8);
+            stemGrad.setAttribute('x1', '0'); stemGrad.setAttribute('y1', '1');
+            stemGrad.setAttribute('x2', '0'); stemGrad.setAttribute('y2', '0');
+            const s1 = document.createElementNS(svgNS, 'stop');
+            s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', colorSet.stem);
+            const s2 = document.createElementNS(svgNS, 'stop');
+            s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', colorSet.tip);
+            stemGrad.appendChild(s1); stemGrad.appendChild(s2);
+            defs.appendChild(stemGrad);
+            svg.appendChild(defs);
+
+            // Stam - kurvad path
+            const cx = width / 2;
+            const stemWave1 = (Math.random() - 0.5) * 12;
+            const stemWave2 = (Math.random() - 0.5) * 10;
+            const stemPath = document.createElementNS(svgNS, 'path');
+            stemPath.setAttribute('stroke', `url(#${stemGrad.id})`);
+            stemPath.setAttribute('stroke-width', '5');
+            stemPath.setAttribute('fill', 'none');
+            stemPath.setAttribute('stroke-linecap', 'round');
+            svg.appendChild(stemPath);
+
+            // Löv - mer realistiska bladformer
+            const leafCount = 4 + Math.floor(Math.random() * 4);
+            const leafElements = [];
+            for (let i = 0; i < leafCount; i++) {
+                const leafG = document.createElementNS(svgNS, 'g');
+                leafG.style.opacity = '0';
+                leafG.style.transition = 'opacity 0.3s';
+
+                const side = i % 2 === 0 ? -1 : 1;
+                const leafHeight = ((i + 1) / (leafCount + 1)) * maxHeight;
+                const leafLen = 12 + Math.random() * 14;
+                const leafCurve = 4 + Math.random() * 5;
+
+                // Blad som SVG path (naturlig bladform)
+                const leaf = document.createElementNS(svgNS, 'path');
+                const lx = 0;
+                const ly = 0;
+                const endX = side * leafLen;
+                const endY = -3 - Math.random() * 4;
+                const cp1x = side * leafLen * 0.4;
+                const cp1y = -leafCurve;
+                const cp2x = side * leafLen * 0.7;
+                const cp2y = endY - leafCurve * 0.5;
+                const cp3x = side * leafLen * 0.7;
+                const cp3y = endY + leafCurve * 0.8;
+                const cp4x = side * leafLen * 0.3;
+                const cp4y = leafCurve * 0.6;
+
+                leaf.setAttribute('d',
+                    `M${lx},${ly} C${cp1x},${cp1y} ${cp2x},${cp2y} ${endX},${endY} C${cp3x},${cp3y} ${cp4x},${cp4y} ${lx},${ly} Z`
+                );
+                leaf.setAttribute('fill', colorSet.leaf);
+                leaf.setAttribute('stroke', colorSet.leafDark);
+                leaf.setAttribute('stroke-width', '0.5');
+
+                // Mittnerv på bladet
+                const vein = document.createElementNS(svgNS, 'path');
+                vein.setAttribute('d', `M${lx},${ly} Q${side * leafLen * 0.5},${-leafCurve * 0.3} ${endX},${endY}`);
+                vein.setAttribute('stroke', colorSet.leafDark);
+                vein.setAttribute('stroke-width', '0.6');
+                vein.setAttribute('fill', 'none');
+                vein.setAttribute('opacity', '0.5');
+
+                leafG.appendChild(leaf);
+                leafG.appendChild(vein);
+                svg.appendChild(leafG);
+
+                leafElements.push({
+                    el: leafG,
+                    height: leafHeight,
+                    side,
+                    baseX: cx + stemWave1 * (leafHeight / maxHeight),
+                });
+            }
+
+            return { svg, stemPath, leafElements, cx, stemWave1, stemWave2, stemGradId: stemGrad.id };
+        }
+
+        function updateSeaweedPath(algObj) {
+            const { svgData, maxHeight, currentHeight } = algObj;
+            const { cx, stemWave1, stemWave2, stemPath, leafElements } = svgData;
+            const h = currentHeight;
+            const bottom = maxHeight + 20;
+
+            // Kurvad stam
+            const mid1Y = bottom - h * 0.33;
+            const mid2Y = bottom - h * 0.66;
+            const topY = bottom - h;
+            const wave1 = stemWave1 * (h / maxHeight);
+            const wave2 = stemWave2 * (h / maxHeight);
+
+            stemPath.setAttribute('d',
+                `M${cx},${bottom} C${cx + wave1 * 0.3},${mid1Y + 10} ${cx + wave1},${mid1Y} ${cx + wave1 * 0.7},${mid1Y}` +
+                ` S${cx + wave2},${mid2Y} ${cx + wave2 * 0.5},${topY}`
+            );
+
+            // Placera och visa/dölj löv
+            for (const leaf of leafElements) {
+                if (h >= leaf.height) {
+                    leaf.el.style.opacity = '1';
+                    const t = leaf.height / maxHeight;
+                    const lx = cx + stemWave1 * t * 0.7 + stemWave2 * t * 0.3;
+                    const ly = bottom - leaf.height;
+                    leaf.el.setAttribute('transform', `translate(${lx}, ${ly})`);
+                } else {
+                    leaf.el.style.opacity = '0';
+                }
+            }
+        }
 
         function createAlg() {
             if (gameOver) return;
@@ -337,52 +718,30 @@
 
             const x = xMin + Math.random() * (xMax - xMin);
             const maxHeight = 80 + Math.random() * 150;
-            const color = algColors[Math.floor(Math.random() * algColors.length)];
+            const colorSet = algColorSets[Math.floor(Math.random() * algColorSets.length)];
+
+            const svgData = createSeaweedSVG(maxHeight, colorSet);
 
             const el = document.createElement('div');
             el.className = 'alg';
-            el.style.left = x + 'px';
-            el.style.width = '50px';
-
-            const stem = document.createElement('div');
-            stem.className = 'alg-stem';
-            stem.style.background = color.stem;
-            stem.style.height = '0px';
-            el.appendChild(stem);
-
-            // Skapa löv längs stammen
-            const leafCount = 3 + Math.floor(Math.random() * 3);
-            const leaves = [];
-            for (let i = 0; i < leafCount; i++) {
-                const leaf = document.createElement('div');
-                leaf.className = 'alg-leaf ' + (i % 2 === 0 ? 'left' : 'right');
-                leaf.style.background = color.leaf;
-                const leafHeight = ((i + 1) / (leafCount + 1)) * maxHeight;
-                leaf.style.bottom = leafHeight + 'px';
-                if (i % 2 === 0) {
-                    leaf.style.left = 'calc(50% - 26px)';
-                } else {
-                    leaf.style.left = 'calc(50% + 4px)';
-                }
-                el.appendChild(leaf);
-                leaves.push({ el: leaf, height: leafHeight });
-            }
+            el.style.left = (x - 30) + 'px';
+            el.style.width = '60px';
+            el.appendChild(svgData.svg);
 
             game.appendChild(el);
 
             const algObj = {
                 el,
-                stem,
-                leaves,
+                svgData,
                 side,
                 x,
                 maxHeight,
                 currentHeight: 0,
                 phase: 'growing',
-                growSpeed: 2.5 + Math.random() * 1.5,
-                pauseTime: 800 + Math.random() * 1200,
+                growSpeed: 3.5 + Math.random() * 2,
+                pauseTime: 600 + Math.random() * 800,
                 pauseStart: 0,
-                shrinkSpeed: 2 + Math.random() * 1.5,
+                shrinkSpeed: 3 + Math.random() * 2,
                 swayOffset: Math.random() * Math.PI * 2,
             };
 
@@ -400,7 +759,6 @@
         function hitAlg(algObj) {
             algObj.phase = 'dead';
 
-            // Poäng
             if (algObj.side === 'left') {
                 score1++;
                 score1El.textContent = score1;
@@ -413,7 +771,6 @@
                 setTimeout(() => score2El.style.transform = 'translateX(50%) scale(1)', 150);
             }
 
-            // Explosion
             const rect = algObj.el.getBoundingClientRect();
             const gameRect = game.getBoundingClientRect();
             const cx = rect.left + rect.width / 2 - gameRect.left;
@@ -421,11 +778,9 @@
             createExplosion(cx, cy);
             playExplosionSound();
 
-            // Ta bort algen
             algObj.el.remove();
             alger = alger.filter(a => a !== algObj);
 
-            // Kolla vinst
             if (score1 >= WIN_SCORE) {
                 endGame('Spelare 1 vinner!', '#4fc3f7');
             } else if (score2 >= WIN_SCORE) {
@@ -439,16 +794,24 @@
             container.style.left = x + 'px';
             container.style.top = y + 'px';
 
-            const colors = ['#ffeb3b', '#ff9800', '#f44336', '#4caf50', '#8bc34a', '#ff5722'];
-            for (let i = 0; i < 14; i++) {
+            // Ring
+            const ring = document.createElement('div');
+            ring.className = 'explosion-ring';
+            container.appendChild(ring);
+
+            // Partiklar - blandning av gröna (algbitar) och ljusa
+            const colors = ['#66bb6a', '#43a047', '#ffeb3b', '#fff9c4', '#81c784', '#a5d6a7', '#ff9800'];
+            for (let i = 0; i < 18; i++) {
                 const p = document.createElement('div');
                 p.className = 'explosion-particle';
-                const angle = (Math.PI * 2 * i) / 14;
-                const dist = 40 + Math.random() * 50;
+                const angle = (Math.PI * 2 * i) / 18 + (Math.random() - 0.5) * 0.3;
+                const dist = 30 + Math.random() * 60;
                 p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
                 p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
-                p.style.width = (4 + Math.random() * 8) + 'px';
-                p.style.height = p.style.width;
+                const size = 3 + Math.random() * 7;
+                p.style.width = size + 'px';
+                p.style.height = size * (0.5 + Math.random() * 0.8) + 'px';
+                p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
                 p.style.background = colors[Math.floor(Math.random() * colors.length)];
                 container.appendChild(p);
             }
@@ -462,14 +825,14 @@
             if (gameOver) return;
             const bubble = document.createElement('div');
             bubble.className = 'bubble';
-            const size = 4 + Math.random() * 12;
+            const size = 3 + Math.random() * 10;
             bubble.style.width = size + 'px';
             bubble.style.height = size + 'px';
             bubble.style.left = Math.random() * 100 + '%';
-            bubble.style.bottom = '0';
-            bubble.style.animationDuration = (4 + Math.random() * 6) + 's';
+            bubble.style.bottom = (5 + Math.random() * 15) + '%';
+            bubble.style.animationDuration = (5 + Math.random() * 8) + 's';
             game.appendChild(bubble);
-            setTimeout(() => bubble.remove(), 10000);
+            setTimeout(() => bubble.remove(), 13000);
         }
 
         // ---- Game loop ----
@@ -485,7 +848,7 @@
                 const a = alger[i];
 
                 // Vaja-effekt
-                const sway = Math.sin(time / 500 + a.swayOffset) * 3;
+                const sway = Math.sin(time / 600 + a.swayOffset) * 4;
                 a.el.style.transform = `translateX(${sway}px)`;
 
                 if (a.phase === 'growing') {
@@ -511,16 +874,7 @@
                     }
                 }
 
-                a.stem.style.height = a.currentHeight + 'px';
-
-                // Visa/dölj löv baserat på aktuell höjd
-                for (const leaf of a.leaves) {
-                    if (a.currentHeight >= leaf.height) {
-                        leaf.el.classList.add('visible');
-                    } else {
-                        leaf.el.classList.remove('visible');
-                    }
-                }
+                updateSeaweedPath(a);
             }
 
             requestAnimationFrame(gameLoop);
@@ -536,11 +890,11 @@
         function increaseDifficulty() {
             difficultyTimer = setInterval(() => {
                 if (gameOver) return;
-                if (spawnInterval > 400) {
-                    spawnInterval -= 100;
+                if (spawnInterval > 250) {
+                    spawnInterval -= 80;
                     startSpawning();
                 }
-            }, 5000);
+            }, 4000);
         }
 
         function endGame(text, color) {
@@ -562,7 +916,7 @@
             winnerScreen.classList.remove('show');
             alger.forEach(a => a.el.remove());
             alger = [];
-            spawnInterval = 1800;
+            spawnInterval = 1200;
             lastTime = 0;
             startSpawning();
             increaseDifficulty();
@@ -572,8 +926,7 @@
         // ---- Init ----
         playAgainBtn.addEventListener('click', resetGame);
 
-        // Starta direkt
-        setInterval(createBubble, 2000);
+        setInterval(createBubble, 1500);
         createAlg();
         startSpawning();
         increaseDifficulty();

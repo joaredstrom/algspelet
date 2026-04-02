@@ -16,7 +16,9 @@ Byggt med HTML, CSS och JavaScript med hjälp av Claude Opus 4.6 (claude-opus-4-
 - "Eeeoo"-ljud när alger växer upp och ner
 - Första spelaren till 30 poäng vinner
 - Det blir svårare - fler och fler alger dyker upp
-- Havsbotten-bakgrund med bubblor
+- Realistisk havsbotten med sand, stenar, snäckor, sjöstjärnor och koraller
+- Ljusstrålar från ytan och drivande partiklar i vattnet
+- Algerna ser ut som riktigt sjögräs med kurvade stammar och naturliga blad
 
 ### Mina instruktioner
 
@@ -50,17 +52,36 @@ Claude ställde fler frågor:
 - **Vem vinner?** - Den som först får 30
 - **Ska det finnas en startskärm?** - Börja direkt
 
+#### Göra det mer realistiskt
+
+Sen sa jag:
+
+> Det ska se ut mer som på riktigt och mer som riktig botten
+
+Claude ställde frågor:
+
+- **Ska det finnas saker på botten?** - Ja, allt (stenar, snäckor, sjöstjärnor, koraller)
+- **Ska det finnas sand?** - Sand
+- **Ska vattnet se mer ut som vatten?** - Allt i vatten, ljusstrålar
+- **Ska algerna också se mer verkliga ut?** - Ja, de ska se mer riktiga ut
+
+#### Snabbare tempo
+
+Sen sa jag:
+
+> Gör så de kommer oftare och snabbare
+
 ### Hur mina instruktioner blev till kod
 
 Här är vad Claude gjorde för att mina instruktioner skulle bli verklighet:
 
 #### 1. Skapa havsbotten
 
-Bakgrunden är en gradient som går från mörkt blå högst upp (vattnet) ner till brunt längst ner (havsbotten). Det finns också små bubblor som stiger uppåt för att det ska känna mer som under vattnet.
+Bakgrunden är en gradient som går från mörkt blå högst upp (vattnet) ner till brunt längst ner (havsbotten). Botten är gjord med SVG - en ojämn sandyta med textur. På botten finns stenar i olika storlekar, koraller (röda, orange och rosa med förgreningar), snäckor, musslor och sjöstjärnor i olika färger. Ljusstrålar skimrar ner från ytan och små partiklar driver runt i vattnet. Bubblor stiger uppåt och gungar lite åt sidorna.
 
 #### 2. Få alger att växa
 
-Varje alg är en grön stam som växer uppåt med små blad på sidan - precis som sjögräs. De dyker upp på slumpmässiga ställen, växer upp, stannar kvar ett tag, och krymper sedan tillbaka ner. De vajar lite fram och tillbaka för att känna mer levande.
+Varje alg är en SVG med en kurvad stam och naturliga bladformer med mittnerver - precis som riktigt sjögräs. Stammen har en gradient från mörkare vid botten till ljusare i toppen. De dyker upp på slumpmässiga ställen, växer upp, stannar kvar ett tag, och krymper sedan tillbaka ner. De vajar lite fram och tillbaka för att kännas mer levande.
 
 #### 3. Ljuden - eeeoo
 
@@ -76,7 +97,7 @@ Varje gång man trycker på en alg får man ett poäng och poängen studsar till
 
 #### 6. Svårare och svårare
 
-I början dyker det upp en ny alg ungefär varannan sekund. Var femte sekund ökar takten så att alger dyker upp oftare och oftare. Till slut kommer de så snabbt att det är riktigt svårt att hinna med!
+Jag ville att algerna skulle komma oftare och snabbare. Nu börjar det med en ny alg drygt varje sekund, och de växer upp och ner snabbare. Var fjärde sekund ökar takten ännu mer. Till slut kommer de så snabbt att det är riktigt svårt att hinna med!
 
 ---
 
@@ -94,7 +115,9 @@ Built with HTML, CSS and JavaScript using Claude Opus 4.6 (claude-opus-4-6) via 
 - "Eeeoo" sound when seaweed grows up and down
 - First player to 30 points wins
 - It gets harder - more and more seaweed appears
-- Ocean floor background with bubbles
+- Realistic ocean floor with sand, rocks, shells, starfish and corals
+- Light rays from the surface and drifting particles in the water
+- Seaweed looks like real sea grass with curved stems and natural leaves
 
 ### My instructions
 
@@ -128,17 +151,36 @@ Claude asked more questions:
 - **Who wins?** - The one who first gets 30
 - **Should there be a start screen?** - Start immediately
 
+#### Making it more realistic
+
+Then I said:
+
+> It should look more like real life and more like a real ocean floor
+
+Claude asked questions:
+
+- **Should there be things on the bottom?** - Yes, everything (rocks, shells, starfish, corals)
+- **Should there be sand?** - Sand
+- **Should the water look more like water?** - Everything in water, light rays
+- **Should the seaweed also look more real?** - Yes, they should look more real
+
+#### Faster pace
+
+Then I said:
+
+> Make them come more often and faster
+
 ### How my instructions became code
 
 Here is what Claude did to make my instructions become reality:
 
 #### 1. Create the ocean floor
 
-The background is a gradient that goes from dark blue at the top (the water) down to brown at the bottom (the ocean floor). There are also small bubbles rising upwards to make it feel more like being underwater.
+The background is a gradient that goes from dark blue at the top (the water) down to brown at the bottom (the ocean floor). The floor is made with SVG - an uneven sandy surface with texture. On the bottom there are rocks in different sizes, corals (red, orange and pink with branches), shells, clams and starfish in different colors. Light rays shimmer down from the surface and small particles drift around in the water. Bubbles rise upwards and sway side to side.
 
 #### 2. Make seaweed grow
 
-Each seaweed is a green stem that grows upward with small leaves on the side - just like sea grass. They appear in random places, grow up, stay for a while, and then shrink back down. They sway slightly back and forth to feel more alive.
+Each seaweed is an SVG with a curved stem and natural leaf shapes with veins - just like real sea grass. The stem has a gradient from darker at the bottom to lighter at the top. They appear in random places, grow up, stay for a while, and then shrink back down. They sway slightly back and forth to feel more alive.
 
 #### 3. The sounds - eeeoo
 
@@ -154,4 +196,4 @@ Every time you tap a seaweed you get a point and the score bounces a little to m
 
 #### 6. Harder and harder
 
-In the beginning, a new seaweed appears roughly every two seconds. Every five seconds the pace increases so that seaweed appears more and more frequently. Eventually they come so fast that it's really hard to keep up!
+I wanted the seaweed to come more often and faster. Now it starts with a new seaweed roughly every second, and they grow up and down faster. Every four seconds the pace increases even more. Eventually they come so fast that it's really hard to keep up!
