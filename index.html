@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algspelet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        #game {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: linear-gradient(180deg, #0a3d6b 0%, #0c4a7a 30%, #1a6e5c 70%, #2d8a6e 85%, #3a6b4a 95%, #5c4a2a 100%);
+        }
+
+        /* Havsbotten-dekorationer */
+        #game::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 15%;
+            background: linear-gradient(180deg, transparent, #4a3520 40%, #3d2b18);
+            z-index: 0;
+        }
+
+        /* Röd linje i mitten */
+        #divider {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #ff3333;
+            z-index: 50;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px rgba(255, 50, 50, 0.5);
+        }
+
+        /* Poäng */
+        .score {
+            position: absolute;
+            top: 20px;
+            font-size: 3rem;
+            font-weight: bold;
+            z-index: 60;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+        }
+
+        #score1 {
+            left: 20%;
+            color: #4fc3f7;
+            transform: translateX(-50%);
+        }
+
+        #score2 {
+            right: 20%;
+            color: #ff8a65;
+            transform: translateX(50%);
+        }
+
+        .score-label {
+            position: absolute;
+            top: 75px;
+            font-size: 1rem;
+            z-index: 60;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+            opacity: 0.8;
+        }
+
+        #label1 {
+            left: 20%;
+            color: #4fc3f7;
+            transform: translateX(-50%);
+        }
+
+        #label2 {
+            right: 20%;
+            color: #ff8a65;
+            transform: translateX(50%);
+        }
+
+        /* Alger */
+        .alg {
+            position: absolute;
+            bottom: 5%;
+            z-index: 10;
+            cursor: pointer;
+            transform-origin: bottom center;
+        }
+
+        .alg-stem {
+            width: 12px;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 6px;
+            transition: height 0.05s linear;
+        }
+
+        .alg-leaf {
+            position: absolute;
+            width: 22px;
+            height: 14px;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .alg-leaf.visible {
+            opacity: 1;
+        }
+
+        .alg-leaf.left {
+            transform: rotate(-30deg);
+        }
+
+        .alg-leaf.right {
+            transform: rotate(30deg);
+        }
+
+        /* Explosion */
+        .explosion {
+            position: absolute;
+            z-index: 100;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+        }
+
+        .explosion-particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: explode 0.5s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Vinnare */
+        #winner-screen {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #winner-screen.show {
+            display: flex;
+        }
+
+        #winner-text {
+            font-size: 4rem;
+            font-weight: bold;
+            text-shadow: 0 0 20px currentColor;
+            margin-bottom: 30px;
+        }
+
+        #play-again {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            background: #fff;
+            color: #333;
+            font-weight: bold;
+            transition: transform 0.1s;
+        }
+
+        #play-again:hover {
+            transform: scale(1.05);
+        }
+
+        #play-again:active {
+            transform: scale(0.95);
+        }
+
+        /* Bubblor i bakgrunden */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), rgba(255,255,255,0.05));
+            z-index: 1;
+            animation: rise linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(0) scale(1); opacity: 0.6; }
+            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <div id="divider"></div>
+
+        <div id="score1" class="score">0</div>
+        <div id="label1" class="score-label">Spelare 1</div>
+
+        <div id="score2" class="score">0</div>
+        <div id="label2" class="score-label">Spelare 2</div>
+
+        <div id="winner-screen">
+            <div id="winner-text"></div>
+            <button id="play-again">Spela igen!</button>
+        </div>
+    </div>
+
+    <script>
+        const game = document.getElementById('game');
+        const score1El = document.getElementById('score1');
+        const score2El = document.getElementById('score2');
+        const winnerScreen = document.getElementById('winner-screen');
+        const winnerText = document.getElementById('winner-text');
+        const playAgainBtn = document.getElementById('play-again');
+
+        let score1 = 0;
+        let score2 = 0;
+        let gameOver = false;
+        let alger = [];
+        let spawnInterval = 1800;
+        let spawnTimer = null;
+        let difficultyTimer = null;
+        const WIN_SCORE = 30;
+
+        // ---- Ljud med Web Audio API ----
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playEeeoo(up) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            const now = audioCtx.currentTime;
+            if (up) {
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.linearRampToValueAtTime(600, now + 0.3);
+            } else {
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.linearRampToValueAtTime(200, now + 0.3);
+            }
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.linearRampToValueAtTime(0, now + 0.35);
+            osc.start(now);
+            osc.stop(now + 0.35);
+        }
+
+        function playExplosionSound() {
+            const bufferSize = audioCtx.sampleRate * 0.3;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+            }
+            const source = audioCtx.createBufferSource();
+            source.buffer = buffer;
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+            source.connect(gain);
+            gain.connect(audioCtx.destination);
+            source.start();
+        }
+
+        function playWinSound() {
+            const notes = [523, 659, 784, 1047];
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.type = 'square';
+                osc.frequency.value = freq;
+                const t = audioCtx.currentTime + i * 0.15;
+                gain.gain.setValueAtTime(0.12, t);
+                gain.gain.linearRampToValueAtTime(0, t + 0.3);
+                osc.start(t);
+                osc.stop(t + 0.3);
+            });
+        }
+
+        // ---- Alger ----
+        const algColors = [
+            { stem: '#2e7d32', leaf: '#43a047' },
+            { stem: '#1b5e20', leaf: '#388e3c' },
+            { stem: '#33691e', leaf: '#558b2f' },
+            { stem: '#2e7d32', leaf: '#66bb6a' },
+            { stem: '#1a5c20', leaf: '#4caf50' },
+        ];
+
+        function createAlg() {
+            if (gameOver) return;
+
+            const side = Math.random() < 0.5 ? 'left' : 'right';
+            const gameRect = game.getBoundingClientRect();
+            const halfW = gameRect.width / 2;
+
+            let xMin, xMax;
+            if (side === 'left') {
+                xMin = 30;
+                xMax = halfW - 30;
+            } else {
+                xMin = halfW + 30;
+                xMax = gameRect.width - 30;
+            }
+
+            const x = xMin + Math.random() * (xMax - xMin);
+            const maxHeight = 80 + Math.random() * 150;
+            const color = algColors[Math.floor(Math.random() * algColors.length)];
+
+            const el = document.createElement('div');
+            el.className = 'alg';
+            el.style.left = x + 'px';
+            el.style.width = '50px';
+
+            const stem = document.createElement('div');
+            stem.className = 'alg-stem';
+            stem.style.background = color.stem;
+            stem.style.height = '0px';
+            el.appendChild(stem);
+
+            // Skapa löv längs stammen
+            const leafCount = 3 + Math.floor(Math.random() * 3);
+            const leaves = [];
+            for (let i = 0; i < leafCount; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'alg-leaf ' + (i % 2 === 0 ? 'left' : 'right');
+                leaf.style.background = color.leaf;
+                const leafHeight = ((i + 1) / (leafCount + 1)) * maxHeight;
+                leaf.style.bottom = leafHeight + 'px';
+                if (i % 2 === 0) {
+                    leaf.style.left = 'calc(50% - 26px)';
+                } else {
+                    leaf.style.left = 'calc(50% + 4px)';
+                }
+                el.appendChild(leaf);
+                leaves.push({ el: leaf, height: leafHeight });
+            }
+
+            game.appendChild(el);
+
+            const algObj = {
+                el,
+                stem,
+                leaves,
+                side,
+                x,
+                maxHeight,
+                currentHeight: 0,
+                phase: 'growing',
+                growSpeed: 2.5 + Math.random() * 1.5,
+                pauseTime: 800 + Math.random() * 1200,
+                pauseStart: 0,
+                shrinkSpeed: 2 + Math.random() * 1.5,
+                swayOffset: Math.random() * Math.PI * 2,
+            };
+
+            el.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (gameOver || algObj.phase === 'dead') return;
+                hitAlg(algObj);
+            });
+
+            alger.push(algObj);
+            playEeeoo(true);
+        }
+
+        function hitAlg(algObj) {
+            algObj.phase = 'dead';
+
+            // Poäng
+            if (algObj.side === 'left') {
+                score1++;
+                score1El.textContent = score1;
+                score1El.style.transform = 'translateX(-50%) scale(1.3)';
+                setTimeout(() => score1El.style.transform = 'translateX(-50%) scale(1)', 150);
+            } else {
+                score2++;
+                score2El.textContent = score2;
+                score2El.style.transform = 'translateX(50%) scale(1.3)';
+                setTimeout(() => score2El.style.transform = 'translateX(50%) scale(1)', 150);
+            }
+
+            // Explosion
+            const rect = algObj.el.getBoundingClientRect();
+            const gameRect = game.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2 - gameRect.left;
+            const cy = rect.top + rect.height * 0.3 - gameRect.top;
+            createExplosion(cx, cy);
+            playExplosionSound();
+
+            // Ta bort algen
+            algObj.el.remove();
+            alger = alger.filter(a => a !== algObj);
+
+            // Kolla vinst
+            if (score1 >= WIN_SCORE) {
+                endGame('Spelare 1 vinner!', '#4fc3f7');
+            } else if (score2 >= WIN_SCORE) {
+                endGame('Spelare 2 vinner!', '#ff8a65');
+            }
+        }
+
+        function createExplosion(x, y) {
+            const container = document.createElement('div');
+            container.className = 'explosion';
+            container.style.left = x + 'px';
+            container.style.top = y + 'px';
+
+            const colors = ['#ffeb3b', '#ff9800', '#f44336', '#4caf50', '#8bc34a', '#ff5722'];
+            for (let i = 0; i < 14; i++) {
+                const p = document.createElement('div');
+                p.className = 'explosion-particle';
+                const angle = (Math.PI * 2 * i) / 14;
+                const dist = 40 + Math.random() * 50;
+                p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+                p.style.width = (4 + Math.random() * 8) + 'px';
+                p.style.height = p.style.width;
+                p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(p);
+            }
+
+            game.appendChild(container);
+            setTimeout(() => container.remove(), 600);
+        }
+
+        // ---- Bubblor ----
+        function createBubble() {
+            if (gameOver) return;
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = 4 + Math.random() * 12;
+            bubble.style.width = size + 'px';
+            bubble.style.height = size + 'px';
+            bubble.style.left = Math.random() * 100 + '%';
+            bubble.style.bottom = '0';
+            bubble.style.animationDuration = (4 + Math.random() * 6) + 's';
+            game.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 10000);
+        }
+
+        // ---- Game loop ----
+        let lastTime = 0;
+
+        function gameLoop(time) {
+            if (gameOver) return;
+
+            const dt = lastTime ? (time - lastTime) : 16;
+            lastTime = time;
+
+            for (let i = alger.length - 1; i >= 0; i--) {
+                const a = alger[i];
+
+                // Vaja-effekt
+                const sway = Math.sin(time / 500 + a.swayOffset) * 3;
+                a.el.style.transform = `translateX(${sway}px)`;
+
+                if (a.phase === 'growing') {
+                    a.currentHeight += a.growSpeed * (dt / 16);
+                    if (a.currentHeight >= a.maxHeight) {
+                        a.currentHeight = a.maxHeight;
+                        a.phase = 'pausing';
+                        a.pauseStart = time;
+                    }
+                } else if (a.phase === 'pausing') {
+                    if (time - a.pauseStart >= a.pauseTime) {
+                        a.phase = 'shrinking';
+                        playEeeoo(false);
+                    }
+                } else if (a.phase === 'shrinking') {
+                    a.currentHeight -= a.shrinkSpeed * (dt / 16);
+                    if (a.currentHeight <= 0) {
+                        a.currentHeight = 0;
+                        a.phase = 'dead';
+                        a.el.remove();
+                        alger.splice(i, 1);
+                        continue;
+                    }
+                }
+
+                a.stem.style.height = a.currentHeight + 'px';
+
+                // Visa/dölj löv baserat på aktuell höjd
+                for (const leaf of a.leaves) {
+                    if (a.currentHeight >= leaf.height) {
+                        leaf.el.classList.add('visible');
+                    } else {
+                        leaf.el.classList.remove('visible');
+                    }
+                }
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function startSpawning() {
+            if (spawnTimer) clearInterval(spawnTimer);
+            spawnTimer = setInterval(() => {
+                if (!gameOver) createAlg();
+            }, spawnInterval);
+        }
+
+        function increaseDifficulty() {
+            difficultyTimer = setInterval(() => {
+                if (gameOver) return;
+                if (spawnInterval > 400) {
+                    spawnInterval -= 100;
+                    startSpawning();
+                }
+            }, 5000);
+        }
+
+        function endGame(text, color) {
+            gameOver = true;
+            clearInterval(spawnTimer);
+            clearInterval(difficultyTimer);
+            winnerText.textContent = text;
+            winnerText.style.color = color;
+            winnerScreen.classList.add('show');
+            playWinSound();
+        }
+
+        function resetGame() {
+            gameOver = false;
+            score1 = 0;
+            score2 = 0;
+            score1El.textContent = '0';
+            score2El.textContent = '0';
+            winnerScreen.classList.remove('show');
+            alger.forEach(a => a.el.remove());
+            alger = [];
+            spawnInterval = 1800;
+            lastTime = 0;
+            startSpawning();
+            increaseDifficulty();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // ---- Init ----
+        playAgainBtn.addEventListener('click', resetGame);
+
+        // Starta direkt
+        setInterval(createBubble, 2000);
+        createAlg();
+        startSpawning();
+        increaseDifficulty();
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
