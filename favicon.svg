@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a3155"/>
+      <stop offset="50%" stop-color="#0f5c7a"/>
+      <stop offset="100%" stop-color="#1a4a3a"/>
+    </linearGradient>
+    <linearGradient id="seaweed1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4CAF50"/>
+      <stop offset="100%" stop-color="#1B5E20"/>
+    </linearGradient>
+    <linearGradient id="seaweed2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#66BB6A"/>
+      <stop offset="100%" stop-color="#2E7D32"/>
+    </linearGradient>
+    <linearGradient id="seaweed3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#81C784"/>
+      <stop offset="100%" stop-color="#388E3C"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="url(#bg)"/>
+  <!-- Light rays -->
+  <polygon points="180,0 220,280 140,280" fill="rgba(180,220,255,0.06)"/>
+  <polygon points="320,0 360,300 280,300" fill="rgba(180,220,255,0.05)"/>
+  <!-- Bubbles -->
+  <circle cx="150" cy="120" r="12" fill="none" stroke="rgba(200,230,255,0.3)" stroke-width="2"/>
+  <circle cx="370" cy="90" r="8" fill="none" stroke="rgba(200,230,255,0.25)" stroke-width="2"/>
+  <circle cx="300" cy="160" r="6" fill="none" stroke="rgba(200,230,255,0.2)" stroke-width="1.5"/>
+  <!-- Seaweed strands -->
+  <path d="M160,510 Q140,400 170,340 Q200,280 160,220 Q130,170 155,120" stroke="url(#seaweed1)" stroke-width="28" fill="none" stroke-linecap="round"/>
+  <path d="M260,510 Q230,420 270,350 Q310,280 260,210 Q220,150 250,90" stroke="url(#seaweed2)" stroke-width="32" fill="none" stroke-linecap="round"/>
+  <path d="M360,510 Q380,430 340,360 Q300,290 350,230 Q390,180 360,130" stroke="url(#seaweed3)" stroke-width="26" fill="none" stroke-linecap="round"/>
+  <!-- Small seaweed -->
+  <path d="M100,510 Q80,460 110,420 Q130,380 105,340" stroke="url(#seaweed1)" stroke-width="16" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M420,510 Q440,450 410,390 Q390,340 415,290" stroke="url(#seaweed3)" stroke-width="18" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <!-- Sand/bottom -->
+  <ellipse cx="256" cy="520" rx="280" ry="40" fill="#2d5a3a" opacity="0.5"/>
+</svg>

@@ -1,0 +1,27 @@
+{
+  "name": "Algspelet",
+  "short_name": "Algspelet",
+  "description": "Klipp algerna i det underbara havet!",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0a3155",
+  "theme_color": "#0f5c7a",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
